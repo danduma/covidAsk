@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <!-- Header starts -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script src="{{ url_for('static', filename='files/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='files/js/jquery.easing.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='files/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='files/js/sb-admin-2.min.js') }}"></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="{{ url_for('static', filename='files/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='files/css/sb-admin-2.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='files/css/default.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='files/images/favicon.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='files/css/style.css') }}">
+
+    <title>Medwise.ai BMJ demo</title>
+  </head>
+  <body id='page-top'>
+    <div class="myWrapper" id="wrapper">
+      <div class="d-flex flex-column" id="content-wrapper" style="background-color: white">
+        <div class="" id="content">
+          <nav class="navbar fixed-top navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+            <div class="container-fluid">
+              <a href="/" class="navbar-brand ml-2">
+                Home
+              </a>
+
+            </div>
+          </nav>
+          <div class="container mb-2 landing-search" id="_myLanding">
+               <div class="row mb-3">
+              <div class="col-xl-12 mx-auto text-center">
+                <span class="mybrand"><img src="files/images/mw_bmj_logo.png" width="300px"/></span>
+                <br>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+                <form name="search" id="search-form" action="./search" method="get">
+                  <div class="form-row normal-search-form">
+                      <div style="width: 100%; text-align: center">
+                      <input type="text" id="covid_query_input" name="query" class="form-control bg-white border-1" placeholder="Ask a question" value="{{query}}"><button type="submit" id="covid_query_button" class="btn-query"><i class="fas fa-search fa-2x"></i></button> {#  <img src="{{ url_for('static', filename='files/images/mag.png') }}">#}
+                    </div>
+                  </div>
+
+                    <div style="text-align: center;">
+                      <small>Latency: {{latency}}ms</small>
+                    </div>
+
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="container-fluid col-sm-12 col-md-9 col-lg-8 mb-3" id="results_container">
+
+            <div class="row">
+              <div class="col-12">
+                {% if res['denspi']|length %}
+                  {% for item in res['denspi'] %}
+                    <div class="card mb-3 shadow"> {# border-left-primary #}
+                      <div class="card-body">
+                        <div class="item_abstracts">
+                          <div class="row">
+                            <div class="col-12">
+                              <p>
+                                {{item['parsed_text']|safe}}
+                              </p>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-12 col-md-10">
+                              <small>
+                                <span class="item_title_span">
+                                  {% if 'pubmed_id' in item['metadata'] %}
+                                    {% if item['metadata']['pubmed_id'] != 'NaN' %}
+                                      <a href="https://www.ncbi.nlm.nih.gov/pubmed/{{item['metadata']['pubmed_id']}}" target="_blank">
+                                    {% endif %}
+                                  {% endif %}
+                                  {% if 'title_original' in item['metadata'] %}
+                                    {{item['metadata']['title_original']}}.
+                                  {% else %}
+                                    {{item['title']}}.
+                                  {% endif %}
+                                  {% if 'pubmed_id' in item['metadata'] %}
+                                    {% if item['metadata']['pubmed_id'] != 'NaN' %}
+                                      </a>
+                                    {% endif %}
+                                  {% endif %}
+                                </span>
+                                {% if 'journal' in item['metadata'] %}
+                                  {% if item['metadata']['journal'] != 'NaN' %}
+                                    <br>
+                                    <span class="item_journal_span">{{item['metadata']['journal']}}.</span>
+                                  {% endif %}
+                                {% endif %}
+                              </small>
+                            </div>
+                            <div class="col-sm-12 col-md-2 text-right publish_time_div">
+                              <span class="algin-text-bottom">
+                                {% if 'publish_time' in item['metadata'] %}
+                                  {% if item['metadata']['publish_time']['month'] != '' %}
+                                    {{item['metadata']['publish_time']['month']}},
+                                  {% endif %}
+                                  {% if item['metadata']['publish_time']['year'] != '' %}
+                                    {{item['metadata']['publish_time']['year']}}
+                                  {% endif %}
+                                {% endif %}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  <div class="no_res_box text-center">
+                    <p class="lead mb-5">No answers found.</p>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    $("#search-form").on("submit", function(event){
+      var query = $.trim($("#covid_query_input").val());
+      if (query == "") {
+        alert("Please enter query.");
+        return false;
+      }
+    });
+  </script>
+</html>

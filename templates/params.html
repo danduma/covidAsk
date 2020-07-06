@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <!-- Header starts -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script src="files/js/jquery.min.js"></script>
+    <script src="files/js/jquery.easing.min.js"></script>
+    <script src="files/js/bootstrap.min.js"></script>
+    <script src="files/js/sb-admin-2.min.js"></script>
+    <script src="files/js/highlight.pack.js"></script>
+
+    <!-- <script src="js/bootstrap.min.js"></script> -->
+
+    <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:200,200i&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="files/css/all.min.css">
+    <link rel="stylesheet" href="files/css/sb-admin-2.min.css">
+    <link rel="stylesheet" href="files/css/default.css">
+    <link rel="shortcut icon" href="files/images/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="files/css/highlight/github-gist.css">
+    <!-- Header ends -->
+
+    <link rel="stylesheet" href="files/css/style.css">
+
+    <title>Medwise.ai BMJ demo</title>
+
+  </head>
+  <body id='page-top'>
+    <div class="myWrapper" id="wrapper">
+      <div class="d-flex flex-column" id="content-wrapper" style="background-color: white">
+        <div class="" id="content">
+
+          <div class="container mb-4 landing" id="_myLanding">
+            <div class="row mb-3">
+              <div class="col-xl-12 mx-auto text-center">
+                <span class="mybrand"><img src="files/images/mw_bmj_logo.png" width="300px"/></span>
+                <br>
+              </div>
+            </div>
+            <div class="row">
+              <form name="search" id="search-form" action="./search" method="get" style="width: 100%">
+                <div class="col-sm-12 col-md-10 col-lg-10 mx-auto mb-5">
+                  <div class="form-row normal-search-form">
+                    <div style="width: 100%; text-align: center">
+                      <input type="text" id="covid_query_input" name="query" class="form-control bg-white border-1" placeholder="Ask a question"><button type="submit" id="covid_query_button" class="btn-query"><i class="fas fa-search fa-2x"></i></button></button>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+                  <div class="row">
+                    <div class="col-12">
+			    You can ask questions like:
+			<ul>
+
+				<li><a href="/search?query=What are the symptoms in infants?">What are the symptoms in infants?</a></li>
+				<li><a href="/search?query=When did covid-19 become a pandemic?">When did covid-19 become a pandemic?</a></li>
+				<li><a href="/search?query=What are associated co-morbidities?">What are associated co-morbidities?</a></li>
+                <li><a href="/search?query=Is vitamin C useful?">Is vitamin C useful?</a></li>
+			</ul>
+
+
+                      <br>
+            		      <br>
+
+                    </div>
+                  </div>
+                  <div class="row">
+                    <!-- Hyper parameter selection start -->
+                      <div class="">
+                      <div class="col-12">
+                        <div class="row">
+                          <div class="col-12 col-md-3 mb-2">
+                            <h1 class="h6">Search strategy:</h1>
+                          </div>
+                          <div class="col-12 col-md-9 mb-2 form-check">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="strat" class="form-check-input" value="dense_first" id="strat_dfs" checked>
+                              <label for="strat_dfs">Dense-First</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="strat" class="form-check-input" value="sparse_first" id="strat_sfs">
+                              <label for="strat_sfs">Sparse-First</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="strat" class="form-check-input" value="hybrid" id="strat_hybrid">
+                              <label for="strat_hybrid">Hybrid</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="row">
+                          <div class="col-12 col-md-3 mb-2">
+                            <h1 class="h6">Max answer length:</h1>
+                          </div>
+                          <div class="col-12 col-md-9 mb-2 form-check">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="max_answer_length" class="form-check-input" value="10" id="max_answer_length_10">
+                              <label for="max_answer_length_10">10</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="max_answer_length" class="form-check-input" value="20" id="max_answer_length_20" checked>
+                              <label for="max_answer_length_20">20</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="max_answer_length" class="form-check-input" value="30" id="max_answer_length_30">
+                              <label for="max_answer_length_30">30</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="row">
+                          <div class="col-12 col-md-3 mb-2">
+                            <h1 class="h6">Top K:</h1>
+                          </div>
+                          <div class="col-12 col-md-9 mb-2 form-check">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="top_k" class="form-check-input" value="10" id="top_k_10" checked>
+                              <label for="top_k_10">10</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="top_k" class="form-check-input" value="30" id="top_k_30">
+                              <label for="top_k_30">30</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="top_k" class="form-check-input" value="100" id="top_k_100">
+                              <label for="top_k_100">100</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="row">
+                          <div class="col-12 col-md-3 mb-2">
+                            <h1 class="h6">Nprobe:</h1>
+                          </div>
+                          <div class="col-12 col-md-9 mb-2 form-check">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="nprobe" class="form-check-input" value="256" id="nprobe_256" checked>
+                              <label for="nprobe_256">256</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="nprobe" class="form-check-input" value="512" id="nprobe_512">
+                              <label for="nprobe_512">512</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="nprobe" class="form-check-input" value="1024" id="nprobe_1024">
+                              <label for="nprobe_1024">1024</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="row">
+                          <div class="col-12 col-md-3 mb-2">
+                            <h1 class="h6">Doc top K:</h1>
+                          </div>
+                          <div class="col-12 col-md-9 mb-2 form-check">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="doc_top_k" class="form-check-input" value="5" id="doc_top_k_5" checked>
+                              <label for="doc_top_k_5">5</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="doc_top_k" class="form-check-input" value="10" id="doc_top_k_10">
+                              <label for="doc_top_k_10">10</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="doc_top_k" class="form-check-input" value="20" id="doc_top_k_20">
+                              <label for="doc_top_k_20">20</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="row">
+                          <div class="col-12 col-md-3 mb-2">
+                            <h1 class="h6">Sparse weight:</h1>
+                          </div>
+                          <div class="col-12 col-md-9 mb-2 form-check">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="sparse_weight" class="form-check-input" value="0.01" id="sparse_weight_001">
+                              <label for="sparse_weight_001">0.01</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="sparse_weight" class="form-check-input" value="0.05" id="sparse_weight_005" checked>
+                              <label for="sparse_weight_005">0.05</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="sparse_weight" class="form-check-input" value="0.1" id="sparse_weight_01">
+                              <label for="sparse_weight_01">0.1</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="sparse_weight" class="form-check-input" value="0.3" id="sparse_weight_03">
+                              <label for="sparse_weight_03">0.3</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="row">
+                          <div class="col-12 col-md-3 mb-2">
+                            <h1 class="h6">Aggregate:</h1>
+                          </div>
+                          <div class="col-12 col-md-9 mb-2 form-check">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="aggregate" class="form-check-input" value="True" id="aggregate_true" checked>
+                              <label for="aggregate_true">True</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input type="radio" name="aggregate" class="form-check-input" value="False" id="aggregate_false">
+                              <label for="aggregate_false">False</label>
+                            </div>
+                          </div>
+                        </div>
+		                  </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </form>
+            </div>
+          </div>
+          <hr>
+
+
+          <hr>
+
+        </div>
+      </div>
+    </div>
+
+
+  </body>
+  <script type="text/javascript">
+    $("#search-form").on("submit", function(event){
+      var query = $.trim($("#covid_query_input").val());
+      if (query == "") {
+        alert("Please enter query.");
+        return false;
+      }
+    });
+
+    function t_r(){
+      var t = document.getElementById("resources_container");
+      t.scrollIntoView();
+    }
+
+  </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+</html>
