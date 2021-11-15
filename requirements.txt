@@ -20,7 +20,7 @@ pandas==0.23.0
 parso==0.6.2
 pexpect==4.2.1
 pickleshare==0.7.5
-pip==20.0.2
+pip==21.1
 prettytable==0.7.2
 prompt-toolkit==3.0.4
 ptyprocess==0.6.0
